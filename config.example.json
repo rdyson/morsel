@@ -6,12 +6,12 @@
   "anthropic": {
     "api_key": "REPLACE_WITH_YOUR_ANTHROPIC_API_KEY"
   },
-  "r2": {
-    "endpoint_url": "https://REPLACE_ACCOUNT_ID.r2.cloudflarestorage.com",
-    "access_key_id": "REPLACE_WITH_R2_ACCESS_KEY",
-    "secret_access_key": "REPLACE_WITH_R2_SECRET_KEY",
-    "bucket": "REPLACE_WITH_BUCKET_NAME",
-    "public_url": "https://REPLACE_WITH_PUBLIC_URL"
+  "storage": {
+    "endpoint_url": "https://<account-id>.r2.cloudflarestorage.com (Cloudflare R2) or https://s3.<region>.amazonaws.com (AWS S3) or https://s3.<region>.backblazeb2.com (Backblaze B2)",
+    "access_key_id": "YOUR_ACCESS_KEY_ID",
+    "secret_access_key": "YOUR_SECRET_ACCESS_KEY",
+    "bucket": "YOUR_BUCKET_NAME",
+    "public_url": "https://your-public-bucket-url"
   },
   "podcast": {
     "title": "Morsel",

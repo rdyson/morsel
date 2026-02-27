@@ -19,13 +19,13 @@ def get_r2_client(config: dict):
     # We use boto3 for S3-compat operations
     import boto3
 
-    r2_config = config["r2"]
+    storage_config = config["storage"]
     session = boto3.session.Session()
     return session.client(
         "s3",
-        endpoint_url=r2_config["endpoint_url"],
-        aws_access_key_id=r2_config["access_key_id"],
-        aws_secret_access_key=r2_config["secret_access_key"],
+        endpoint_url=storage_config["endpoint_url"],
+        aws_access_key_id=storage_config["access_key_id"],
+        aws_secret_access_key=storage_config["secret_access_key"],
         region_name="auto",
     )
 
@@ -33,8 +33,8 @@ def get_r2_client(config: dict):
 def upload_file(config: dict, local_path: Path, r2_key: str, content_type: str) -> str:
     """Upload a file to R2. Returns the public URL."""
     client = get_r2_client(config)
-    bucket = config["r2"]["bucket"]
-    public_url = config["r2"]["public_url"].rstrip("/")
+    bucket = config["storage"]["bucket"]
+    public_url = config["storage"]["public_url"].rstrip("/")
 
     client.upload_file(
         str(local_path),
@@ -51,7 +51,7 @@ def upload_file(config: dict, local_path: Path, r2_key: str, content_type: str) 
 def delete_old_episodes(config: dict, keep_days: int = 7):
     """Delete audio files older than keep_days from R2."""
     client = get_r2_client(config)
-    bucket = config["r2"]["bucket"]
+    bucket = config["storage"]["bucket"]
 
     response = client.list_objects_v2(Bucket=bucket, Prefix="audio/")
     if "Contents" not in response:
@@ -80,7 +80,7 @@ def generate_feed(config: dict, episodes: list[dict]) -> str:
     title = podcast_config.get("title", "Morsel")
     description = podcast_config.get("description", "Daily article digest in bite-sized audio")
     author = podcast_config.get("author", "Morsel")
-    public_url = config["r2"]["public_url"].rstrip("/")
+    public_url = config["storage"]["public_url"].rstrip("/")
     feed_url = f"{public_url}/feed.xml"
 
     # Build RSS XML
@@ -187,5 +187,5 @@ def update_feed(config: dict, new_episode: dict):
 
     upload_file(config, feed_path, "feed.xml", "application/rss+xml")
 
-    public_url = config["r2"]["public_url"].rstrip("/")
+    public_url = config["storage"]["public_url"].rstrip("/")
     print(f"\n  Feed URL: {public_url}/feed.xml")

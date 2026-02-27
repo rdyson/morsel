@@ -123,7 +123,7 @@ def generate_digest(queue_date: str, config: dict) -> Path | None:
     generate_audio(script, audio_path, voice)
 
     # Upload to R2 and update feed
-    if config.get("r2", {}).get("bucket"):
+    if config.get("storage", {}).get("bucket"):
         print("  Uploading to R2...")
         episode = upload_episode(config, audio_path, notes_path, queue_date)
         update_feed(config, episode)
