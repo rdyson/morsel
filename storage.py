@@ -97,6 +97,14 @@ def generate_feed(config: dict, episodes: list[dict]) -> str:
     ET.SubElement(channel, "{http://www.itunes.com/dtds/podcast-1.0.dtd}author").text = author
     ET.SubElement(channel, "{http://www.itunes.com/dtds/podcast-1.0.dtd}explicit").text = "false"
 
+    # Podcast image (optional)
+    image_url = podcast_config.get("image_url")
+    if image_url:
+        ET.SubElement(channel, "{http://www.itunes.com/dtds/podcast-1.0.dtd}image", {"href": image_url})
+        image = ET.SubElement(channel, "image")
+        ET.SubElement(image, "url").text = image_url
+        ET.SubElement(image, "title").text = title
+
     # Self-referencing atom link (helps podcast apps)
     ET.SubElement(channel, "{http://www.w3.org/2005/Atom}link", {
         "href": feed_url,

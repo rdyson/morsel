@@ -1,7 +1,8 @@
 {
   "agentmail": {
     "api_key": "YOUR_AGENTMAIL_API_KEY",
-    "email_address": "your-name@agentmail.to"
+    "email_address": "your-name@agentmail.to",
+    "allowed_senders": ["you@example.com"]
   },
   "anthropic": {
     "api_key": "REPLACE_WITH_YOUR_ANTHROPIC_API_KEY"
@@ -16,7 +17,8 @@
   "podcast": {
     "title": "Morsel",
     "description": "Daily article summaries",
-    "author": "Morsel"
+    "author": "Morsel",
+    "image_url": ""
   },
   "tts": {
     "voice": "en-US-AndrewMultilingualNeural"

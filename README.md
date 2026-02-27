@@ -39,7 +39,8 @@ cp config.example.json config.json
 {
   "agentmail": {
     "api_key": "YOUR_AGENTMAIL_API_KEY",
-    "email_address": "foo@agentmail.to"
+    "email_address": "foo@agentmail.to",
+    "allowed_senders": ["you@example.com"]
   },
   "anthropic": {
     "api_key": "sk-ant-..."
@@ -54,7 +55,8 @@ cp config.example.json config.json
   "podcast": {
     "title": "Morsel",
     "description": "Daily article digest in summarized audio",
-    "author": "Morsel"
+    "author": "Morsel",
+    "image_url": ""
   },
   "tts": {
     "voice": "en-US-AndrewMultilingualNeural"
@@ -65,6 +67,8 @@ cp config.example.json config.json
 ### AgentMail inbox
 
 Create an inbox at [AgentMail](https://agentmail.to) and put the email address in `config.json`.
+
+Add your email address(es) to `allowed_senders` to restrict who can submit links. If the list is empty, all senders are accepted.
 
 ### S3-compatible storage
 
@@ -117,6 +121,10 @@ python poll_inbox.py --watch
 # Generate a digest for a specific date
 python generate_digest.py 2026-02-20
 ```
+
+## Podcast image
+
+A `cover.png` is included in the repo. Upload it to your storage bucket and set `podcast.image_url` in `config.json` to its public URL. Or use your own square image (minimum 1400x1400px).
 
 ## Voices
 

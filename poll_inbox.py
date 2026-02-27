@@ -133,7 +133,16 @@ def poll_once(config: dict) -> int:
         if "processed" in (msg_item.labels or []):
             continue
 
-        print(f"\n  New email: {msg_item.subject or '(no subject)'}")
+        print(f"\n  New email: {msg_item.subject or '(no subject)'} (from: {msg_item.from_})")
+
+        # Check sender allowlist
+        allowed_senders = config["agentmail"].get("allowed_senders", [])
+        if allowed_senders and msg_item.from_ not in allowed_senders:
+            print(f"    Sender not in allowed_senders, skipping")
+            client.inboxes.messages.update(
+                inbox, msg_item.message_id, add_labels=["rejected"],
+            )
+            continue
 
         # Get full message for text content
         msg = client.inboxes.messages.get(inbox, msg_item.message_id)
