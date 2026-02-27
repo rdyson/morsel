@@ -25,6 +25,5 @@
     "cron_hour": 7,
     "cron_minute": 0,
     "timezone": "GMT"
-  },
-  "data_dir": "data"
+  }
 }

@@ -53,7 +53,7 @@ Number of articles: {num_articles}
 
 def generate_digest(queue_date: str, config: dict) -> Path | None:
     """Generate a podcast digest for the given date. Returns path to MP3 or None."""
-    data_dir = get_data_dir(config)
+    data_dir = get_data_dir()
     queue_dir = data_dir / "queue" / queue_date
     digest_dir = data_dir / "digest"
     audio_dir = data_dir / "audio"

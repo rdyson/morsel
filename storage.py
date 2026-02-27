@@ -149,7 +149,7 @@ def upload_episode(config: dict, audio_path: Path, show_notes_path: Path, episod
 
 def load_episode_index(config: dict) -> list[dict]:
     """Load the episode index from local data dir."""
-    data_dir = get_data_dir(config)
+    data_dir = get_data_dir()
     index_path = data_dir / "episodes.json"
     if index_path.exists():
         return json.loads(index_path.read_text())
@@ -158,7 +158,7 @@ def load_episode_index(config: dict) -> list[dict]:
 
 def save_episode_index(config: dict, episodes: list[dict]):
     """Save the episode index to local data dir."""
-    data_dir = get_data_dir(config)
+    data_dir = get_data_dir()
     index_path = data_dir / "episodes.json"
     index_path.write_text(json.dumps(episodes, indent=2))
 
@@ -180,7 +180,7 @@ def update_feed(config: dict, new_episode: dict):
 
     # Generate and upload feed
     feed_xml = generate_feed(config, episodes)
-    data_dir = get_data_dir(config)
+    data_dir = get_data_dir()
     feed_path = data_dir / "feed.xml"
     feed_path.write_text(feed_xml)
 

@@ -116,7 +116,7 @@ def queue_article(article: dict, queue_dir: Path) -> Path:
 
 def poll_once(config: dict) -> int:
     """Check for new emails, scrape articles, return count of new articles queued."""
-    data_dir = get_data_dir(config)
+    data_dir = get_data_dir()
     today = date.today().isoformat()
     queue_dir = data_dir / "queue" / today
 

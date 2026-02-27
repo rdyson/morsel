@@ -25,8 +25,10 @@ def load_config() -> dict:
     return config
 
 
-def get_data_dir(config: dict) -> Path:
+DATA_DIR = Path(__file__).parent / "data"
+
+
+def get_data_dir() -> Path:
     """Return the data directory, creating it if needed."""
-    data_dir = Path(__file__).parent / config.get("data_dir", "data")
-    data_dir.mkdir(parents=True, exist_ok=True)
-    return data_dir
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    return DATA_DIR

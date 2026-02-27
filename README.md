@@ -11,7 +11,7 @@ Daily article digest in a podcast. Forward links throughout the day, get a singl
 
 ## Requirements
 
-- A machine that stays on (VM, VPS, Raspberry Pi, etc.)
+- A machine that stays on for daily automation (VM, VPS, Raspberry Pi, etc.) — or run manually on any machine including macOS
 - Python 3.10+
 - [AgentMail](https://agentmail.to) account (email ingestion; free up to 3,000 emails/month)
 - [Anthropic API key](https://console.anthropic.com) (summarization)
@@ -58,8 +58,7 @@ cp config.example.json config.json
   },
   "tts": {
     "voice": "en-US-AndrewMultilingualNeural"
-  },
-  "data_dir": "data"
+  }
 }
 ```
 
