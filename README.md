@@ -7,7 +7,7 @@ Daily article digest in a podcast for a few cents an episode. Forward links thro
 ## How it works
 
 1. Forward article links to an email address
-2. A daily cron job generates a podcast script (Claude API) based on the articles you saved, converts it to audio (Edge TTS), and uploads the episode to S3-compatible storage
+2. A daily cron job generates a podcast script (Claude API) based on the articles you've sent, converts it to audio (Edge TTS), and uploads the episode to S3-compatible storage
 3. Subscribe to the RSS feed in any podcast app
 
 ## Requirements
