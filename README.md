@@ -2,7 +2,7 @@
 
 <img src="logo.png" alt="Morsel" width="200">
 
-Daily article digest in a podcast. Forward links throughout the day, get a single podcast episode each morning summarizing each article.
+Daily article digest in a podcast for a few cents an episode. Forward links throughout the day, get a single podcast episode each morning summarizing each article.
 
 ## How it works
 
