@@ -22,7 +22,7 @@ from storage import upload_episode, update_feed
 DIGEST_PROMPT = """\
 You are producing a daily article digest podcast called "Morsel".
 
-Write a podcast script for today's episode based on the articles below.
+Write a podcast script summarizing the articles below. The listener will read the full article if interested — your job is to help them decide whether each article is worth their time.
 
 FORMATTING RULES (strict):
 - Output ONLY the spoken words — plain text, no markdown, no headers, no bullet points, no horizontal rules, no formatting of any kind
@@ -42,10 +42,9 @@ CONTENT RULES:
 STRUCTURE:
 - Open with "Good morning, this is Morsel for [date]" — then get into it
 - Start with the most significant story
-- Cover each article with enough depth to be useful (not just a sentence or two)
+- Spend 2-3 minutes per article (roughly 300-450 words each) — cover the core argument or finding, enough context to be useful, then move on
 - Use short, clean transitions between stories — no forced excitement or clever segues
 - Close with "That's Morsel for today" or similar — one sentence, no more
-- Target length: 1800-2200 words. This is important — do not go under 1500 words.
 
 Today's date: {date}
 Number of articles: {num_articles}
