@@ -1,0 +1,30 @@
+{
+  "agentmail": {
+    "api_key": "REPLACE_WITH_YOUR_AGENTMAIL_API_KEY",
+    "inbox_id": "REPLACE_WITH_YOUR_INBOX_ID"
+  },
+  "anthropic": {
+    "api_key": "REPLACE_WITH_YOUR_ANTHROPIC_API_KEY"
+  },
+  "r2": {
+    "endpoint_url": "https://REPLACE_ACCOUNT_ID.r2.cloudflarestorage.com",
+    "access_key_id": "REPLACE_WITH_R2_ACCESS_KEY",
+    "secret_access_key": "REPLACE_WITH_R2_SECRET_KEY",
+    "bucket": "REPLACE_WITH_BUCKET_NAME",
+    "public_url": "https://REPLACE_WITH_PUBLIC_URL"
+  },
+  "podcast": {
+    "title": "Morsel",
+    "description": "Daily article summaries",
+    "author": "Morsel"
+  },
+  "tts": {
+    "voice": "en-US-AndrewMultilingualNeural"
+  },
+  "digest": {
+    "cron_hour": 7,
+    "cron_minute": 0,
+    "timezone": "GMT"
+  },
+  "data_dir": "data"
+}
