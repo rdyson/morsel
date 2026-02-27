@@ -4,18 +4,15 @@ Upload files to S3-compatible storage and manage the podcast RSS feed.
 
 import hashlib
 import json
-import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from pathlib import Path
-
-import httpx
 
 from config_loader import load_config, get_data_dir
 
 
 def get_storage_client(config: dict):
-    """Create an httpx-based S3-compatible client."""
+    """Create a boto3 S3-compatible client."""
     import boto3
 
     storage_config = config["storage"]
@@ -35,11 +32,16 @@ def upload_file(config: dict, local_path: Path, key: str, content_type: str) -> 
     bucket = config["storage"]["bucket"]
     public_url = config["storage"]["public_url"].rstrip("/")
 
+    extra_args = {"ContentType": content_type}
+    # Prevent CDN caching for files that change frequently (e.g. feed.xml)
+    if content_type == "application/rss+xml":
+        extra_args["CacheControl"] = "no-cache, max-age=0"
+
     client.upload_file(
         str(local_path),
         bucket,
         key,
-        ExtraArgs={"ContentType": content_type},
+        ExtraArgs=extra_args,
     )
 
     url = f"{public_url}/{key}"
@@ -69,6 +71,15 @@ def delete_old_episodes(config: dict, keep_days: int = 30):
         print(f"  Cleaned up {deleted} old episode(s)")
 
 
+def _escape_xml(text: str) -> str:
+    """Escape text for XML content."""
+    return (text
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;"))
+
+
 def generate_feed(config: dict, episodes: list[dict]) -> str:
     """Generate an RSS podcast feed XML string.
 
@@ -76,65 +87,54 @@ def generate_feed(config: dict, episodes: list[dict]) -> str:
         title, description, audio_url, audio_size, date, show_notes
     """
     podcast_config = config.get("podcast", {})
-    title = podcast_config.get("title", "Morsel")
-    description = podcast_config.get("description", "Daily article digest in bite-sized audio")
-    author = podcast_config.get("author", "Morsel")
+    title = _escape_xml(podcast_config.get("title", "Morsel"))
+    description = _escape_xml(podcast_config.get("description", "Daily article digest in bite-sized audio"))
+    author = _escape_xml(podcast_config.get("author", "Morsel"))
     public_url = config["storage"]["public_url"].rstrip("/")
     feed_url = f"{public_url}/feed.xml"
 
-    # Build RSS XML
-    rss = ET.Element("rss", {
-        "version": "2.0",
-        "xmlns:itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd",
-        "xmlns:atom": "http://www.w3.org/2005/Atom",
-    })
-
-    channel = ET.SubElement(rss, "channel")
-    ET.SubElement(channel, "title").text = title
-    ET.SubElement(channel, "description").text = description
-    ET.SubElement(channel, "language").text = "en"
-    ET.SubElement(channel, "generator").text = "morsel"
-    ET.SubElement(channel, "{http://www.itunes.com/dtds/podcast-1.0.dtd}author").text = author
-    ET.SubElement(channel, "{http://www.itunes.com/dtds/podcast-1.0.dtd}explicit").text = "false"
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">',
+        '  <channel>',
+        f'    <title>{title}</title>',
+        f'    <description>{description}</description>',
+        '    <language>en</language>',
+        '    <generator>morsel</generator>',
+        f'    <itunes:author>{author}</itunes:author>',
+        '    <itunes:explicit>false</itunes:explicit>',
+    ]
 
     # Podcast image (optional)
     image_url = podcast_config.get("image_url")
     if image_url:
-        ET.SubElement(channel, "{http://www.itunes.com/dtds/podcast-1.0.dtd}image", {"href": image_url})
-        image = ET.SubElement(channel, "image")
-        ET.SubElement(image, "url").text = image_url
-        ET.SubElement(image, "title").text = title
+        url = _escape_xml(image_url)
+        lines.append(f'    <itunes:image href="{url}" />')
+        lines.append(f'    <image>')
+        lines.append(f'      <url>{url}</url>')
+        lines.append(f'      <title>{title}</title>')
+        lines.append(f'    </image>')
 
-    # Self-referencing atom link (helps podcast apps)
-    ET.SubElement(channel, "{http://www.w3.org/2005/Atom}link", {
-        "href": feed_url,
-        "rel": "self",
-        "type": "application/rss+xml",
-    })
+    lines.append(f'    <atom:link href="{_escape_xml(feed_url)}" rel="self" type="application/rss+xml" />')
 
     # Add episodes (newest first)
     for ep in sorted(episodes, key=lambda e: e["date"], reverse=True):
-        item = ET.SubElement(channel, "item")
-        ET.SubElement(item, "title").text = ep["title"]
-        ET.SubElement(item, "description").text = ep.get("show_notes", "")
-
         pub_date = datetime.fromisoformat(ep["date"]).replace(tzinfo=timezone.utc)
-        ET.SubElement(item, "pubDate").text = format_datetime(pub_date)
-
-        # Unique ID per episode
         guid = hashlib.sha256(ep["audio_url"].encode()).hexdigest()[:16]
-        ET.SubElement(item, "guid", {"isPermaLink": "false"}).text = guid
 
-        ET.SubElement(item, "enclosure", {
-            "url": ep["audio_url"],
-            "length": str(ep.get("audio_size", 0)),
-            "type": "audio/mpeg",
-        })
+        lines.append('    <item>')
+        lines.append(f'      <title>{_escape_xml(ep["title"])}</title>')
+        lines.append(f'      <description><![CDATA[{ep.get("show_notes", "")}]]></description>')
+        lines.append(f'      <pubDate>{format_datetime(pub_date)}</pubDate>')
+        lines.append(f'      <guid isPermaLink="false">{guid}</guid>')
+        lines.append(f'      <enclosure url="{_escape_xml(ep["audio_url"])}" length="{ep.get("audio_size", 0)}" type="audio/mpeg" />')
+        lines.append(f'      <itunes:duration>{ep.get("duration", "0")}</itunes:duration>')
+        lines.append('    </item>')
 
-        ET.SubElement(item, "{http://www.itunes.com/dtds/podcast-1.0.dtd}duration").text = ep.get("duration", "0")
+    lines.append('  </channel>')
+    lines.append('</rss>')
 
-    ET.indent(rss, space="  ")
-    return '<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(rss, encoding="unicode")
+    return '\n'.join(lines)
 
 
 def upload_episode(config: dict, audio_path: Path, show_notes_path: Path, episode_date: str) -> dict:
