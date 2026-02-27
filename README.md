@@ -35,7 +35,7 @@ Copy the example config and fill in your credentials.
 
 ### AgentMail inbox
 
-Create an inbox at [AgentMail](https://agentmail.to) and put your API key and inbox email address in `config.json`.
+Create an inbox at [AgentMail](https://agentmail.to) and put your API key and inbox email address in `config.json`. You can use an obscure email address to reduce the chances of getting spam.
 
 Add your email address(es) to `allowed_senders` to restrict who can submit links. If the list is empty, all senders are accepted.
 
