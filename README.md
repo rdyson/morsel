@@ -19,6 +19,18 @@ Daily article digest in a podcast for a few cents an episode. Forward links thro
 - S3-compatible storage with public access - [Cloudflare R2](https://developers.cloudflare.com/r2/) (10GB free), [AWS S3](https://aws.amazon.com/s3/), [Backblaze B2](https://www.backblaze.com/b2/), etc.
 - Edge TTS is free and requires no API key or setup.
 
+## Example
+
+Generated from 3 articles:
+
+* [Do you have to be polite to AI?](https://www.bbc.com/future/article/20260224-the-best-way-to-talk-to-a-chatbot)
+* [How to make your AI agents remember and forget?](https://patrickdesjardins.com/blog/how-to-make-agent-ai-remember-and-forget)
+* [Minions: Stripe’s one-shot, end-to-end coding agents](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents)
+
+<br />
+
+https://github.com/user-attachments/assets/4583c561-d233-4ca8-9296-f3a19e2217e7
+
 ## Setup
 
 1. Run the following commands
