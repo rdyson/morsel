@@ -17,7 +17,7 @@ Daily article digest in a podcast for a few cents an episode. Forward links thro
 - [AgentMail](https://agentmail.to) account (email ingestion; free up to 3,000 emails/month)
 - [Anthropic API key](https://console.anthropic.com) (summarization and podcast transcript, about $0.03 for 4 medium-length articles totaling around 3k words using Haiku 4.5; YMMV and you can try different [Anthropic models](https://platform.claude.com/docs/en/about-claude/models/overview))
 - S3-compatible storage with public access - [Cloudflare R2](https://developers.cloudflare.com/r2/) (10GB free), [AWS S3](https://aws.amazon.com/s3/), [Backblaze B2](https://www.backblaze.com/b2/), etc.
-- Edge TTS is free and requires no API key or setup.
+- Edge TTS is free and requires no API key or setup
 
 ## Example
 
@@ -52,13 +52,10 @@ cp config.example.json config.json
     2. Enable public access on the bucket (gives you a `pub-xxx.r2.dev` URL)
     3. Create an API token with read/write access
     4. Fill in the `storage` fields in `config.json`. For AWS S3, set `endpoint_url` to `https://s3.<region>.amazonaws.com`. For Backblaze B2, use their S3-compatible endpoint.
-6. Set up the daily cron job. This runs daily at 4am UTC. Customize your cron job with help from [Crontab Guru](https://crontab.guru). It polls for new emails, generates a digest from queued articles, uploads to storage, and cleans up episodes older than 30 days.
+6. Set up the daily cron job. Customize your cron job with help from [Crontab Guru](https://crontab.guru). It polls for new emails, generates a digest from queued articles, uploads to storage, and cleans up episodes older than 30 days.
 
 ```bash
 crontab -e
-```
-
-```
 0 4 * * * /path/to/morsel/run_daily.sh >> /path/to/morsel/data/cron.log 2>&1
 ```
 
