@@ -18,7 +18,7 @@ Daily article digest in a podcast. Forward links throughout the day, get a singl
 - [AgentMail](https://agentmail.to) account (email ingestion; free up to 3,000 emails/month)
 - [Anthropic API key](https://console.anthropic.com) (summarization)
 - S3-compatible storage with public access - [Cloudflare R2](https://developers.cloudflare.com/r2/) (10GB free), [AWS S3](https://aws.amazon.com/s3/), [Backblaze B2](https://www.backblaze.com/b2/), etc.
-- Edge TTS is free and requires no API key.
+- Edge TTS is free and requires no API key or setup.
 
 ## Setup
 
