@@ -1,5 +1,5 @@
 # Morsel
-<img src="cover.png" alt="Morsel" width="200">
+<img src="logo.png" alt="Morsel" width="200">
 
 
 Daily article digest in a podcast. Forward links throughout the day, get a single podcast episode each morning summarizing everything.
