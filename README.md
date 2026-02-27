@@ -127,6 +127,45 @@ python poll_inbox.py --watch
 python generate_digest.py
 ```
 
+## Using with OpenClaw
+
+If you use [OpenClaw](https://openclaw.dev), you can queue URLs by pasting them in Telegram, WhatsApp, or any other connected channel.
+
+### Setup
+
+1. Install the [AgentMail skill](https://docs.agentmail.to/integrations/openclaw) if you haven't already:
+
+```bash
+npx clawhub@latest install agentmail
+```
+
+2. Copy the Morsel skill into your OpenClaw workspace:
+
+```bash
+cp -r skills/morsel ~/.openclaw/skills/morsel
+```
+
+3. Add the Morsel skill config to `~/.openclaw/openclaw.json`:
+
+```json
+{
+  "skills": {
+    "entries": {
+      "morsel": {
+        "enabled": true,
+        "env": {
+          "MORSEL_INBOX": "your-morsel-inbox@agentmail.to"
+        }
+      }
+    }
+  }
+}
+```
+
+4. Add the OpenClaw sender address to `allowed_senders` in your Morsel `config.json`.
+
+Now you paste a URL in your chat and it gets queued for the next digest.
+
 ## License
 
 MIT
