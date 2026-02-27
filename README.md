@@ -60,7 +60,7 @@ crontab -e
 ```
 
 7. Subscribe to the feed by adding your feed URL to any podcast app (Apple Podcasts, Overcast, Pocket Casts, etc.).
-8. Send or forward article URLs to your AgentMail email address from anywhere — Slack, WhatsApp, email, etc. They'll be included in the next morning's episode.
+8. Send or forward article URLs to your AgentMail email address, and they'll be included in the next morning's episode.
 
 ### Optional customization
 
