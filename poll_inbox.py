@@ -15,7 +15,7 @@ import json
 import re
 import sys
 import time
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
 
 from agentmail import AgentMail
@@ -74,7 +74,7 @@ def extract_urls(text: str) -> list[str]:
 
 
 def queue_article(article: dict, queue_dir: Path) -> Path:
-    """Save a scraped article to the daily queue directory."""
+    """Save a scraped article to the queue."""
     queue_dir.mkdir(parents=True, exist_ok=True)
 
     # Load or create the articles index
@@ -117,8 +117,7 @@ def queue_article(article: dict, queue_dir: Path) -> Path:
 def poll_once(config: dict) -> int:
     """Check for new emails, scrape articles, return count of new articles queued."""
     data_dir = get_data_dir()
-    today = date.today().isoformat()
-    queue_dir = data_dir / "queue" / today
+    queue_dir = data_dir / "queue"
 
     client = AgentMail(api_key=config["agentmail"]["api_key"])
     inbox = config["agentmail"]["email_address"]

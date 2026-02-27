@@ -1,6 +1,6 @@
 # Morsel
-<img src="logo.png" alt="Morsel" width="200">
 
+<img src="logo.png" alt="Morsel" width="200">
 
 Daily article digest in a podcast. Forward links throughout the day, get a single podcast episode each morning summarizing each article.
 
@@ -50,7 +50,6 @@ Any S3-compatible provider works. Example with Cloudflare R2:
 
 For AWS S3, set `endpoint_url` to `https://s3.<region>.amazonaws.com`. For Backblaze B2, use their S3-compatible endpoint.
 
-
 ### Optional customization
 
 A `cover.png` is included in the repo. Upload it to your storage bucket and set `podcast.image_url` in `config.json` to its public URL. Or use your own square image (minimum 1400x1400px).
@@ -96,10 +95,10 @@ crontab -e
 ```
 
 ```
-0 7 * * * /path/to/morsel/run_daily.sh >> /path/to/morsel/data/cron.log 2>&1
+0 4 * * * /path/to/morsel/run_daily.sh >> /path/to/morsel/data/cron.log 2>&1
 ```
 
-This runs daily at 7am UTC. Customize your cron job with help from [Crontab Guru](https://crontab.guru). It polls for new emails, generates yesterday's digest, uploads to storage, and cleans up episodes older than 30 days.
+This runs daily at 4am UTC. Customize your cron job with help from [Crontab Guru](https://crontab.guru). It polls for new emails, generates a digest from queued articles, uploads to storage, and cleans up episodes older than 30 days.
 
 ### 2. Subscribe to the feed
 
@@ -124,8 +123,8 @@ python poll_inbox.py
 # Poll continuously (every 60s)
 python poll_inbox.py --watch
 
-# Generate a digest for a specific date
-python generate_digest.py 2026-02-20
+# Generate a digest from all queued articles
+python generate_digest.py
 ```
 
 ## License

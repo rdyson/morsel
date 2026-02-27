@@ -1,15 +1,14 @@
 #!/bin/bash
 #
 # Daily podcast digest generation.
-# Meant to be run by cron at 7am GMT.
 #
 # 1. Polls AgentMail for any remaining unprocessed emails
-# 2. Generates the digest from yesterday's queue
+# 2. Generates the digest from the queue
 # 3. Uploads audio + feed to storage
 # 4. Cleans up old episodes from storage
 #
-# Crontab entry (7am GMT):
-#   0 7 * * * /home/openclaw/morsel/run_daily.sh >> /home/openclaw/morsel/data/cron.log 2>&1
+# Crontab entry (4am UTC):
+#   0 4 * * * /path/to/morsel/run_daily.sh >> /path/to/morsel/data/cron.log 2>&1
 
 set -e
 
@@ -27,11 +26,10 @@ echo ""
 echo "[1/3] Polling inbox..."
 python poll_inbox.py
 
-# 2. Generate digest from yesterday's articles
-YESTERDAY=$(date -u -d "yesterday" '+%Y-%m-%d' 2>/dev/null || date -u -v-1d '+%Y-%m-%d')
+# 2. Generate digest from queued articles
 echo ""
-echo "[2/3] Generating digest for $YESTERDAY..."
-python generate_digest.py "$YESTERDAY"
+echo "[2/3] Generating digest..."
+python generate_digest.py
 
 # 3. Clean up old episodes from storage
 echo ""
