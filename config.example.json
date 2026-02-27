@@ -1,7 +1,7 @@
 {
   "agentmail": {
-    "api_key": "REPLACE_WITH_YOUR_AGENTMAIL_API_KEY",
-    "inbox_id": "REPLACE_WITH_YOUR_INBOX_ID"
+    "api_key": "YOUR_AGENTMAIL_API_KEY",
+    "email_address": "your-name@agentmail.to"
   },
   "anthropic": {
     "api_key": "REPLACE_WITH_YOUR_ANTHROPIC_API_KEY"

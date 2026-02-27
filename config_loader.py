@@ -17,8 +17,8 @@ def load_config() -> dict:
     # Allow env var overrides
     if os.environ.get("AGENTMAIL_API_KEY"):
         config["agentmail"]["api_key"] = os.environ["AGENTMAIL_API_KEY"]
-    if os.environ.get("AGENTMAIL_INBOX_ID"):
-        config["agentmail"]["inbox_id"] = os.environ["AGENTMAIL_INBOX_ID"]
+    if os.environ.get("AGENTMAIL_EMAIL_ADDRESS"):
+        config["agentmail"]["email_address"] = os.environ["AGENTMAIL_EMAIL_ADDRESS"]
     if os.environ.get("ANTHROPIC_API_KEY"):
         config["anthropic"]["api_key"] = os.environ["ANTHROPIC_API_KEY"]
 

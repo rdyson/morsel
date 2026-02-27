@@ -121,11 +121,11 @@ def poll_once(config: dict) -> int:
     queue_dir = data_dir / "queue" / today
 
     client = AgentMail(api_key=config["agentmail"]["api_key"])
-    inbox_id = config["agentmail"]["inbox_id"]
+    inbox = config["agentmail"]["email_address"]
 
     # Fetch messages without "processed" label
-    print(f"Checking inbox {inbox_id} for new messages...")
-    response = client.inboxes.messages.list(inbox_id, limit=50)
+    print(f"Checking inbox {inbox} for new messages...")
+    response = client.inboxes.messages.list(inbox, limit=10)
 
     new_count = 0
     for msg_item in response.messages:
@@ -136,7 +136,7 @@ def poll_once(config: dict) -> int:
         print(f"\n  New email: {msg_item.subject or '(no subject)'}")
 
         # Get full message for text content
-        msg = client.inboxes.messages.get(inbox_id, msg_item.message_id)
+        msg = client.inboxes.messages.get(inbox, msg_item.message_id)
         text = msg.text or ""
 
         # Extract URLs
@@ -149,7 +149,7 @@ def poll_once(config: dict) -> int:
             print("    No URLs found, skipping")
             # Label no-URL emails as processed so we don't keep checking them
             client.inboxes.messages.update(
-                inbox_id, msg_item.message_id, add_labels=["processed"],
+                inbox, msg_item.message_id, add_labels=["processed"],
             )
             continue
 
@@ -171,7 +171,7 @@ def poll_once(config: dict) -> int:
         if scraped > 0 or failed == len(urls):
             label = "processed" if scraped > 0 else "failed"
             client.inboxes.messages.update(
-                inbox_id, msg_item.message_id, add_labels=[label],
+                inbox, msg_item.message_id, add_labels=[label],
             )
             print(f"    Labeled as {label} ({scraped} scraped, {failed} failed)")
 

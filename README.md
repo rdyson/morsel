@@ -38,8 +38,8 @@ cp config.example.json config.json
 ```json
 {
   "agentmail": {
-    "api_key": "your-agentmail-api-key",
-    "inbox_id": "your-inbox-id"
+    "api_key": "YOUR_AGENTMAIL_API_KEY",
+    "email_address": "foo@agentmail.to"
   },
   "anthropic": {
     "api_key": "sk-ant-..."
@@ -65,13 +65,7 @@ cp config.example.json config.json
 
 ### AgentMail inbox
 
-Create an inbox at [AgentMail](https://agentmail.to), then find your inbox ID:
-
-```bash
-python find_inbox.py
-```
-
-Copy the inbox ID into `config.json`.
+Create an inbox at [AgentMail](https://agentmail.to) and put the email address in `config.json`.
 
 ### S3-compatible storage
 
