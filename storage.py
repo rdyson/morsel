@@ -1,5 +1,5 @@
 """
-Upload files to Cloudflare R2 and manage the podcast RSS feed.
+Upload files to S3-compatible storage and manage the podcast RSS feed.
 """
 
 import hashlib

@@ -40,8 +40,8 @@ python -c "
 from config_loader import load_config
 from storage import delete_old_episodes
 config = load_config()
-if config.get('r2', {}).get('bucket'):
-    delete_old_episodes(config, keep_days=7)
+if config.get('storage', {}).get('bucket'):
+    delete_old_episodes(config, keep_days=30)
 else:
     print('  Storage not configured, skipping cleanup')
 "

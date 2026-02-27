@@ -5,7 +5,7 @@
     "allowed_senders": ["you@example.com"]
   },
   "anthropic": {
-    "api_key": "REPLACE_WITH_YOUR_ANTHROPIC_API_KEY"
+    "api_key": "YOUR_ANTHROPIC_API_KEY"
   },
   "storage": {
     "endpoint_url": "https://<account-id>.r2.cloudflarestorage.com (Cloudflare R2) or https://s3.<region>.amazonaws.com (AWS S3) or https://s3.<region>.backblazeb2.com (Backblaze B2)",
@@ -16,16 +16,11 @@
   },
   "podcast": {
     "title": "Morsel",
-    "description": "Daily article summaries",
+    "description": "Daily article digest in summarized audio",
     "author": "Morsel",
     "image_url": ""
   },
   "tts": {
     "voice": "en-US-AndrewMultilingualNeural"
-  },
-  "digest": {
-    "cron_hour": 7,
-    "cron_minute": 0,
-    "timezone": "GMT"
   }
 }
