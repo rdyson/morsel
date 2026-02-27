@@ -142,7 +142,7 @@ npx clawhub@latest install agentmail
 2. Copy the Morsel skill into your OpenClaw workspace:
 
 ```bash
-cp -r skills/morsel ~/.openclaw/skills/morsel
+cp -r skills/morsel ~/.openclaw/workspace/skills/morsel
 ```
 
 3. Add the Morsel skill config to `~/.openclaw/openclaw.json`:
@@ -154,6 +154,7 @@ cp -r skills/morsel ~/.openclaw/skills/morsel
       "morsel": {
         "enabled": true,
         "env": {
+          "MORSEL_FROM": "your-openclaw-inbox@agentmail.to",
           "MORSEL_INBOX": "your-morsel-inbox@agentmail.to"
         }
       }
