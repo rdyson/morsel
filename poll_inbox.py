@@ -136,9 +136,13 @@ def poll_once(config: dict) -> int:
         print(f"\n  New email: {msg_item.subject or '(no subject)'} (from: {msg_item.from_})")
 
         # Check sender allowlist
-        allowed_senders = config["agentmail"].get("allowed_senders", [])
-        if allowed_senders and msg_item.from_ not in allowed_senders:
-            print(f"    Sender not in allowed_senders, skipping")
+        allowed_senders = [s.lower() for s in config["agentmail"].get("allowed_senders", [])]
+        sender = msg_item.from_ or ""
+        # Extract email from "Name <email>" format
+        email_match = re.search(r'<([^>]+)>', sender)
+        sender_email = (email_match.group(1) if email_match else sender).lower().strip()
+        if allowed_senders and sender_email not in allowed_senders:
+            print(f"    Sender {sender_email} not in allowed_senders, skipping")
             client.inboxes.messages.update(
                 inbox, msg_item.message_id, add_labels=["rejected"],
             )
