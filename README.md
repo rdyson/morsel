@@ -18,7 +18,7 @@ Daily article digest in a podcast. Forward links throughout the day, get a singl
 - [AgentMail](https://agentmail.to) account (email ingestion; free up to 3,000 emails/month)
 - [Anthropic API key](https://console.anthropic.com) (summarization)
 - S3-compatible storage with public access - [Cloudflare R2](https://developers.cloudflare.com/r2/) (10GB free), [AWS S3](https://aws.amazon.com/s3/), [Backblaze B2](https://www.backblaze.com/b2/), etc.
-- Edge TTS is free and requires no API key.
+- Edge TTS is free and requires no API key or setup.
 
 ## Setup
 
@@ -35,7 +35,7 @@ Copy the example config and fill in your credentials.
 
 ### AgentMail inbox
 
-Create an inbox at [AgentMail](https://agentmail.to) and put your API key and inbox email address in `config.json`.
+Create an inbox at [AgentMail](https://agentmail.to) and put your API key and inbox email address in `config.json`. You can use an obscure email address to reduce the chances of getting spam.
 
 Add your email address(es) to `allowed_senders` to restrict who can submit links. If the list is empty, all senders are accepted.
 
