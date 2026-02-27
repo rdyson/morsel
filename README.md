@@ -7,20 +7,21 @@ Daily article digest in a podcast for a few cents an episode. Forward links thro
 ## How it works
 
 1. Forward article links to an email address
-2. A poller picks up new emails, extracts URLs, and scrapes the articles
-3. A daily cron job generates a podcast script (Claude API), converts it to audio (Edge TTS), and uploads the episode to S3-compatible storage
-4. Subscribe to the RSS feed in any podcast app
+2. A daily cron job generates a podcast script (Claude API) based on the articles you saved, converts it to audio (Edge TTS), and uploads the episode to S3-compatible storage
+3. Subscribe to the RSS feed in any podcast app
 
 ## Requirements
 
-- A machine that stays on for daily automation (VM, VPS, Raspberry Pi, etc.) — or run manually on any machine including macOS
+- A machine that stays on for daily automation (VM, VPS, Raspberry Pi, other always-on machine, etc.) — or run manually on any machine including macOS
 - Python 3.10+
 - [AgentMail](https://agentmail.to) account (email ingestion; free up to 3,000 emails/month)
-- [Anthropic API key](https://console.anthropic.com) (summarization, about $0.03 for 4 medium-length articles totaling around 3k words using Haiku 4.5; YMMV and you can try different [Anthropic models](https://platform.claude.com/docs/en/about-claude/models/overview))
+- [Anthropic API key](https://console.anthropic.com) (summarization and podcast transcript, about $0.03 for 4 medium-length articles totaling around 3k words using Haiku 4.5; YMMV and you can try different [Anthropic models](https://platform.claude.com/docs/en/about-claude/models/overview))
 - S3-compatible storage with public access - [Cloudflare R2](https://developers.cloudflare.com/r2/) (10GB free), [AWS S3](https://aws.amazon.com/s3/), [Backblaze B2](https://www.backblaze.com/b2/), etc.
 - Edge TTS is free and requires no API key or setup.
 
 ## Setup
+
+1. Run the following commands
 
 ```bash
 git clone https://github.com/rdyson/morsel.git
@@ -31,24 +32,26 @@ pip install -r requirements.txt
 cp config.example.json config.json
 ```
 
-Copy the example config and fill in your credentials.
+2. Update `config.json` with your credentials.
+3. Create an inbox at [AgentMail](https://agentmail.to) and put your API key and inbox email address in `config.json`. You can use an obscure email address to reduce the chances of getting spam.
+4. Add your email address(es) to `allowed_senders` to restrict who can submit links. If the list is empty, all senders are accepted.
+5. Add any S3-compatible provider. Example with Cloudflare R2:
+    1. Create a bucket in the [Cloudflare dashboard](https://dash.cloudflare.com) → R2
+    2. Enable public access on the bucket (gives you a `pub-xxx.r2.dev` URL)
+    3. Create an API token with read/write access
+    4. Fill in the `storage` fields in `config.json`. For AWS S3, set `endpoint_url` to `https://s3.<region>.amazonaws.com`. For Backblaze B2, use their S3-compatible endpoint.
+6. Set up the daily cron job. This runs daily at 4am UTC. Customize your cron job with help from [Crontab Guru](https://crontab.guru). It polls for new emails, generates a digest from queued articles, uploads to storage, and cleans up episodes older than 30 days.
 
-### AgentMail inbox
+```bash
+crontab -e
+```
 
-Create an inbox at [AgentMail](https://agentmail.to) and put your API key and inbox email address in `config.json`. You can use an obscure email address to reduce the chances of getting spam.
+```
+0 4 * * * /path/to/morsel/run_daily.sh >> /path/to/morsel/data/cron.log 2>&1
+```
 
-Add your email address(es) to `allowed_senders` to restrict who can submit links. If the list is empty, all senders are accepted.
-
-### S3-compatible storage
-
-Any S3-compatible provider works. Example with Cloudflare R2:
-
-1. Create a bucket in the [Cloudflare dashboard](https://dash.cloudflare.com) → R2
-2. Enable public access on the bucket (gives you a `pub-xxx.r2.dev` URL)
-3. Create an API token with read/write access
-4. Fill in the `storage` fields in `config.json`
-
-For AWS S3, set `endpoint_url` to `https://s3.<region>.amazonaws.com`. For Backblaze B2, use their S3-compatible endpoint.
+7. Subscribe to the feed by adding your feed URL to any podcast app (Apple Podcasts, Overcast, Pocket Casts, etc.).
+8. Send or forward article URLs to your AgentMail email address from anywhere — Slack, WhatsApp, email, etc. They'll be included in the next morning's episode.
 
 ### Optional customization
 
@@ -86,35 +89,9 @@ Set your preferred voice in `config.json` under `tts.voice`.
 }
 ```
 
-## Usage
-
-### 1. Set up the daily cron job
-
-```bash
-crontab -e
-```
-
-```
-0 4 * * * /path/to/morsel/run_daily.sh >> /path/to/morsel/data/cron.log 2>&1
-```
-
-This runs daily at 4am UTC. Customize your cron job with help from [Crontab Guru](https://crontab.guru). It polls for new emails, generates a digest from queued articles, uploads to storage, and cleans up episodes older than 30 days.
-
-### 2. Subscribe to the feed
-
-Add your feed URL to any podcast app (Apple Podcasts, Overcast, Pocket Casts, etc.):
-
-```
-https://<your-public-url>/feed.xml
-```
-
-### 3. Forward links
-
-Send or forward article URLs to your AgentMail email address from anywhere — Slack, WhatsApp, email, etc. They'll be included in the next morning's episode.
-
 ### Running manually
 
-You can also run each step individually:
+You can also run each step individually, instead of waiting for the cron job:
 
 ```bash
 # Poll for new emails and queue articles
