@@ -20,27 +20,32 @@ from tts import generate_audio
 from storage import upload_episode, update_feed
 
 DIGEST_PROMPT = """\
-You are a podcast host producing a daily article digest. Your show is called "Morsel".
+You are producing a daily article digest podcast called "Morsel".
 
-Write a podcast script for today's episode based on the articles below. The script should be:
+Write a podcast script for today's episode based on the articles below.
 
-- **Direct and matter-of-fact** — get to the point, no hype, no filler
-- **Calm and measured tone** — think NPR or Bloomberg, not a YouTube tech channel
-- **Conversational but not enthusiastic** — you're briefing a busy professional, not selling them on anything
-- **10-15 minutes when read aloud** (roughly 1500-2200 words)
-- **Well-structured**: very brief intro, cover each story, very brief outro
-- **Strictly faithful to the source material** — only include information, claims, and data that appear in the articles themselves
-- **No editorializing** — do not add your own opinions, speculation, predictions, or commentary beyond what the article states
-- **No extrapolation** — if the article doesn't say it, don't say it. Do not fill gaps with general knowledge or assumptions
-- **Attribution** — when summarizing a claim or finding, attribute it ("according to the article", "the author argues", "Stripe's team found")
+FORMATTING RULES (strict):
+- Output ONLY the spoken words — plain text, no markdown, no headers, no bullet points, no horizontal rules, no formatting of any kind
+- Do not invent a host name — never say "I'm [name]" or "this is [name]"
+- Do not include sound effect cues or music notes
+
+CONTENT RULES:
+- Direct and matter-of-fact — get to the point, no hype, no filler
+- Calm and measured tone — think NPR or Bloomberg, not a YouTube tech channel
+- Conversational but not enthusiastic — you're briefing a busy professional
+- Strictly faithful to the source material — only include information that appears in the articles
+- No editorializing — do not add your own opinions, speculation, or commentary
+- No extrapolation — if the article doesn't say it, don't say it
+- Attribution — when summarizing a claim, attribute it ("according to the article", "the author argues")
+- No superlatives like "incredible", "amazing", "groundbreaking", "exciting"
+
+STRUCTURE:
+- Open with "Good morning, this is Morsel for [date]" — then get into it
 - Start with the most significant story
+- Cover each article with enough depth to be useful (not just a sentence or two)
 - Use short, clean transitions between stories — no forced excitement or clever segues
-- No markdown formatting, no headers, no bullet points — just flowing prose meant to be spoken
-- No sound effect cues or music notes — just the spoken words
-- No superlatives like "incredible", "amazing", "groundbreaking", "exciting" — let the facts speak
-- Don't say "welcome back" or reference previous episodes
-- Open with a brief greeting and today's date — one sentence, then get into it
-- Close with a short sign-off — no more than a sentence
+- Close with "That's Morsel for today" or similar — one sentence, no more
+- Target length: 1800-2200 words. This is important — do not go under 1500 words.
 
 Today's date: {date}
 Number of articles: {num_articles}
@@ -94,7 +99,7 @@ def generate_digest(queue_date: str, config: dict) -> Path | None:
     )
 
     # Generate script via Claude
-    model = config["anthropic"].get("model", "claude-haiku-3-5-20241022")
+    model = config["anthropic"].get("model", "claude-haiku-4-5-20251001")
     print(f"  Generating script ({model})...")
     client = anthropic.Anthropic(api_key=config["anthropic"]["api_key"])
     message = client.messages.create(
