@@ -5,8 +5,8 @@
 #
 # 1. Polls AgentMail for any remaining unprocessed emails
 # 2. Generates the digest from yesterday's queue
-# 3. Uploads audio + feed to R2
-# 4. Cleans up old episodes from R2
+# 3. Uploads audio + feed to storage
+# 4. Cleans up old episodes from storage
 #
 # Crontab entry (7am GMT):
 #   0 7 * * * /home/openclaw/morsel/run_daily.sh >> /home/openclaw/morsel/data/cron.log 2>&1
@@ -33,7 +33,7 @@ echo ""
 echo "[2/3] Generating digest for $YESTERDAY..."
 python generate_digest.py "$YESTERDAY"
 
-# 3. Clean up old episodes from R2
+# 3. Clean up old episodes from storage
 echo ""
 echo "[3/3] Cleaning up old episodes..."
 python -c "
@@ -43,7 +43,7 @@ config = load_config()
 if config.get('r2', {}).get('bucket'):
     delete_old_episodes(config, keep_days=7)
 else:
-    print('  R2 not configured, skipping cleanup')
+    print('  Storage not configured, skipping cleanup')
 "
 
 echo ""

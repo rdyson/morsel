@@ -14,9 +14,8 @@ import httpx
 from config_loader import load_config, get_data_dir
 
 
-def get_r2_client(config: dict):
-    """Create an httpx-based S3-compatible client for R2."""
-    # We use boto3 for S3-compat operations
+def get_storage_client(config: dict):
+    """Create an httpx-based S3-compatible client."""
     import boto3
 
     storage_config = config["storage"]
@@ -30,27 +29,27 @@ def get_r2_client(config: dict):
     )
 
 
-def upload_file(config: dict, local_path: Path, r2_key: str, content_type: str) -> str:
-    """Upload a file to R2. Returns the public URL."""
-    client = get_r2_client(config)
+def upload_file(config: dict, local_path: Path, key: str, content_type: str) -> str:
+    """Upload a file. Returns the public URL."""
+    client = get_storage_client(config)
     bucket = config["storage"]["bucket"]
     public_url = config["storage"]["public_url"].rstrip("/")
 
     client.upload_file(
         str(local_path),
         bucket,
-        r2_key,
+        key,
         ExtraArgs={"ContentType": content_type},
     )
 
-    url = f"{public_url}/{r2_key}"
-    print(f"  Uploaded: {r2_key} → {url}")
+    url = f"{public_url}/{key}"
+    print(f"  Uploaded: {key} → {url}")
     return url
 
 
-def delete_old_episodes(config: dict, keep_days: int = 7):
-    """Delete audio files older than keep_days from R2."""
-    client = get_r2_client(config)
+def delete_old_episodes(config: dict, keep_days: int = 30):
+    """Delete audio files older than keep_days from storage."""
+    client = get_storage_client(config)
     bucket = config["storage"]["bucket"]
 
     response = client.list_objects_v2(Bucket=bucket, Prefix="audio/")
@@ -131,7 +130,7 @@ def generate_feed(config: dict, episodes: list[dict]) -> str:
 
 
 def upload_episode(config: dict, audio_path: Path, show_notes_path: Path, episode_date: str) -> dict:
-    """Upload an episode's audio to R2 and return episode metadata."""
+    """Upload an episode's audio to storage and return episode metadata."""
     audio_key = f"audio/digest-{episode_date}.mp3"
     audio_url = upload_file(config, audio_path, audio_key, "audio/mpeg")
     audio_size = audio_path.stat().st_size
@@ -165,7 +164,7 @@ def save_episode_index(config: dict, episodes: list[dict]):
 
 
 def update_feed(config: dict, new_episode: dict):
-    """Add a new episode to the index, regenerate the feed, and upload to R2."""
+    """Add a new episode to the index, regenerate the feed, and upload to storage."""
     # Load existing episodes
     episodes = load_episode_index(config)
 
@@ -176,7 +175,7 @@ def update_feed(config: dict, new_episode: dict):
 
     episodes.append(new_episode)
 
-    # Only keep episodes from the last 7 days in the feed
+    # Only keep episodes from the last 30 days in the feed
     save_episode_index(config, episodes)
 
     # Generate and upload feed

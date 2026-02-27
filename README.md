@@ -1,13 +1,13 @@
 # Morsel
 
-Daily article digest in bite-sized audio. Forward links throughout the day, get a single podcast episode each morning summarizing everything.
+Daily article digest in a podcast. Forward links throughout the day, get a single podcast episode each morning summarizing everything.
 
 ## How it works
 
-1. You forward article links to an email address
+1. Forward article links to an email address
 2. A poller picks up new emails, extracts URLs, and scrapes the articles
 3. A daily cron job generates a podcast script (Claude API), converts it to audio (Edge TTS), and uploads the episode to S3-compatible storage
-4. You subscribe to the RSS feed in any podcast app
+4. Subscribe to the RSS feed in any podcast app
 
 ## Requirements
 
@@ -53,7 +53,7 @@ cp config.example.json config.json
   },
   "podcast": {
     "title": "Morsel",
-    "description": "Daily article digest in bite-sized audio",
+    "description": "Daily article digest in summarized audio",
     "author": "Morsel"
   },
   "tts": {
@@ -80,35 +80,7 @@ For AWS S3, set `endpoint_url` to `https://s3.<region>.amazonaws.com`. For Backb
 
 ## Usage
 
-### Forward links
-
-Send or forward article URLs to your AgentMail email address from anywhere — Slack, WhatsApp, email, etc.
-
-### Poll for new articles
-
-```bash
-python poll_inbox.py
-```
-
-This checks for new emails, scrapes the articles, and queues them in `data/queue/{date}/`.
-
-To poll continuously:
-
-```bash
-python poll_inbox.py --watch
-```
-
-### Generate a digest
-
-```bash
-python generate_digest.py 2026-02-20
-```
-
-Generates the podcast episode from that day's queued articles, uploads the MP3 and RSS feed to storage.
-
-### Automate with cron
-
-Run the daily digest at 7am UTC:
+### 1. Set up the daily cron job
 
 ```bash
 crontab -e
@@ -118,14 +90,33 @@ crontab -e
 0 7 * * * /path/to/morsel/run_daily.sh >> /path/to/morsel/data/cron.log 2>&1
 ```
 
-`run_daily.sh` does a final poll, generates yesterday's digest, uploads to storage, and cleans up episodes older than 7 days.
+This runs daily at 7am UTC. Customize your cron job with help from [Crontab Guru](https://crontab.guru). It polls for new emails, generates yesterday's digest, uploads to storage, and cleans up episodes older than 30 days.
 
-### Subscribe
+### 2. Subscribe to the feed
 
-Add your feed URL to any podcast app:
+Add your feed URL to any podcast app (Apple Podcasts, Overcast, Pocket Casts, etc.):
 
 ```
 https://<your-public-url>/feed.xml
+```
+
+### 3. Forward links
+
+Send or forward article URLs to your AgentMail email address from anywhere — Slack, WhatsApp, email, etc. They'll be included in the next morning's episode.
+
+### Running manually
+
+You can also run each step individually:
+
+```bash
+# Poll for new emails and queue articles
+python poll_inbox.py
+
+# Poll continuously (every 60s)
+python poll_inbox.py --watch
+
+# Generate a digest for a specific date
+python generate_digest.py 2026-02-20
 ```
 
 ## Voices
