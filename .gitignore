@@ -1,5 +1,7 @@
 config.json
+PLAN.md
 data/
 venv/
 __pycache__/
 *.pyc
+poc/
