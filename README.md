@@ -18,8 +18,7 @@ Daily article digest in a podcast. Forward links throughout the day, get a singl
 - [AgentMail](https://agentmail.to) account (email ingestion; free up to 3,000 emails/month)
 - [Anthropic API key](https://console.anthropic.com) (summarization)
 - S3-compatible storage with public access - [Cloudflare R2](https://developers.cloudflare.com/r2/) (10GB free), [AWS S3](https://aws.amazon.com/s3/), [Backblaze B2](https://www.backblaze.com/b2/), etc.
-
-Edge TTS is free and requires no API key.
+- Edge TTS is free and requires no API key.
 
 ## Setup
 
@@ -29,13 +28,34 @@ cd morsel
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-```
-
-Copy the example config and fill in your credentials:
-
-```bash
 cp config.example.json config.json
 ```
+
+Copy the example config and fill in your credentials.
+
+### AgentMail inbox
+
+Create an inbox at [AgentMail](https://agentmail.to) and put your API key and inbox email address in `config.json`.
+
+Add your email address(es) to `allowed_senders` to restrict who can submit links. If the list is empty, all senders are accepted.
+
+### S3-compatible storage
+
+Any S3-compatible provider works. Example with Cloudflare R2:
+
+1. Create a bucket in the [Cloudflare dashboard](https://dash.cloudflare.com) → R2
+2. Enable public access on the bucket (gives you a `pub-xxx.r2.dev` URL)
+3. Create an API token with read/write access
+4. Fill in the `storage` fields in `config.json`
+
+For AWS S3, set `endpoint_url` to `https://s3.<region>.amazonaws.com`. For Backblaze B2, use their S3-compatible endpoint.
+
+
+### Optional customization
+
+A `cover.png` is included in the repo. Upload it to your storage bucket and set `podcast.image_url` in `config.json` to its public URL. Or use your own square image (minimum 1400x1400px).
+
+Set your preferred voice in `config.json` under `tts.voice`.
 
 ```json
 {
@@ -65,23 +85,6 @@ cp config.example.json config.json
   }
 }
 ```
-
-### AgentMail inbox
-
-Create an inbox at [AgentMail](https://agentmail.to) and put the email address in `config.json`.
-
-Add your email address(es) to `allowed_senders` to restrict who can submit links. If the list is empty, all senders are accepted.
-
-### S3-compatible storage
-
-Any S3-compatible provider works. Example with Cloudflare R2:
-
-1. Create a bucket in the [Cloudflare dashboard](https://dash.cloudflare.com) → R2
-2. Enable public access on the bucket (gives you a `pub-xxx.r2.dev` URL)
-3. Create an API token with read/write access
-4. Fill in the `storage` fields in `config.json`
-
-For AWS S3, set `endpoint_url` to `https://s3.<region>.amazonaws.com`. For Backblaze B2, use their S3-compatible endpoint.
 
 ## Usage
 
@@ -123,20 +126,6 @@ python poll_inbox.py --watch
 # Generate a digest for a specific date
 python generate_digest.py 2026-02-20
 ```
-
-## Podcast image
-
-A `cover.png` is included in the repo. Upload it to your storage bucket and set `podcast.image_url` in `config.json` to its public URL. Or use your own square image (minimum 1400x1400px).
-
-## Voices
-
-Edge TTS offers many voices. List English options:
-
-```bash
-edge-tts --list-voices | grep en-
-```
-
-Set your preferred voice in `config.json` under `tts.voice`.
 
 ## License
 
