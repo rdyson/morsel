@@ -5,7 +5,8 @@
     "allowed_senders": ["you@example.com"]
   },
   "anthropic": {
-    "api_key": "YOUR_ANTHROPIC_API_KEY"
+    "api_key": "YOUR_ANTHROPIC_API_KEY",
+    "model": "claude-haiku-3-5-20241022"
   },
   "storage": {
     "endpoint_url": "https://<account-id>.r2.cloudflarestorage.com (Cloudflare R2) or https://s3.<region>.amazonaws.com (AWS S3) or https://s3.<region>.backblazeb2.com (Backblaze B2)",

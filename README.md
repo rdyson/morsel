@@ -16,7 +16,7 @@ Daily article digest in a podcast. Forward links throughout the day, get a singl
 - A machine that stays on for daily automation (VM, VPS, Raspberry Pi, etc.) — or run manually on any machine including macOS
 - Python 3.10+
 - [AgentMail](https://agentmail.to) account (email ingestion; free up to 3,000 emails/month)
-- [Anthropic API key](https://console.anthropic.com) (summarization)
+- [Anthropic API key](https://console.anthropic.com) (summarization, about $0.10 for 8 medium-length articles; YMMV and you can try different Anthropic models)
 - S3-compatible storage with public access - [Cloudflare R2](https://developers.cloudflare.com/r2/) (10GB free), [AWS S3](https://aws.amazon.com/s3/), [Backblaze B2](https://www.backblaze.com/b2/), etc.
 - Edge TTS is free and requires no API key or setup.
 
@@ -65,7 +65,8 @@ Set your preferred voice in `config.json` under `tts.voice`.
     "allowed_senders": ["you@example.com"]
   },
   "anthropic": {
-    "api_key": "sk-ant-..."
+    "api_key": "sk-ant-...",
+    "model": "claude-haiku-3-5-20241022"
   },
   "storage": {
     "endpoint_url": "https://<account-id>.r2.cloudflarestorage.com (Cloudflare R2) or https://s3.<region>.amazonaws.com (AWS S3) or https://s3.<region>.backblazeb2.com (Backblaze B2)",

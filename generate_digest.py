@@ -94,10 +94,11 @@ def generate_digest(queue_date: str, config: dict) -> Path | None:
     )
 
     # Generate script via Claude
-    print("  Generating script...")
+    model = config["anthropic"].get("model", "claude-haiku-3-5-20241022")
+    print(f"  Generating script ({model})...")
     client = anthropic.Anthropic(api_key=config["anthropic"]["api_key"])
     message = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model=model,
         max_tokens=4096,
         messages=[{"role": "user", "content": prompt}],
     )
