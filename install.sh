@@ -238,7 +238,7 @@ abs_dir="$(pwd)"
 cron_line="0 4 * * * ${abs_dir}/run_daily.sh >> ${abs_dir}/data/cron.log 2>&1"
 
 printf '\n' > /dev/tty
-if prompt_yn "Set up daily cron job (runs at 4 AM UTC)?"; then
+if prompt_yn "Set up daily cron job?"; then
   cron_hour="$(prompt_value "Hour (UTC, 0-23)" "4")"
   cron_minute="$(prompt_value "Minute (0-59)" "0")"
   cron_line="${cron_minute} ${cron_hour} * * * ${abs_dir}/run_daily.sh >> ${abs_dir}/data/cron.log 2>&1"
@@ -250,6 +250,13 @@ if prompt_yn "Set up daily cron job (runs at 4 AM UTC)?"; then
   else
     printf '%s\n%s\n' "$existing_cron" "$cron_line" | crontab -
     info "Cron job installed: $cron_line"
+  fi
+
+  # macOS requires Full Disk Access for cron
+  if [ "$(uname)" = "Darwin" ]; then
+    printf '\n' > /dev/tty
+    warn "macOS requires Full Disk Access for cron jobs to run."
+    printf '  System Settings → Privacy & Security → Full Disk Access → add /usr/sbin/cron\n' > /dev/tty
   fi
 else
   printf 'You can set it up later:\n' > /dev/tty
@@ -269,6 +276,7 @@ printf '  1. Review your config:  %s/config.json\n' "$abs_dir"
 printf '  2. Subscribe to your podcast feed in any podcast app:\n'
 printf '     <your storage public URL>/feed.xml\n'
 printf '  3. Forward article URLs to your AgentMail inbox\n'
-printf '\n'
-printf 'Run manually:  cd %s && source venv/bin/activate && python poll_inbox.py\n' "$abs_dir"
+printf '  4. Wait for the cron job to run, or run manually now:\n'
+printf '  cd %s && source venv/bin/activate\n' "$abs_dir"
+printf '  python poll_inbox.py && python generate_digest.py\n'
 printf '\n'
