@@ -78,36 +78,6 @@ A `cover.png` is included in the repo. Upload it to your storage bucket and set 
 
 Set your preferred voice in `config.json` under `tts.voice`.
 
-```json
-{
-  "agentmail": {
-    "api_key": "YOUR_AGENTMAIL_API_KEY",
-    "email_address": "foo@agentmail.to",
-    "allowed_senders": ["you@example.com"]
-  },
-  "anthropic": {
-    "api_key": "sk-ant-...",
-    "model": "claude-haiku-4-5-20251001"
-  },
-  "storage": {
-    "endpoint_url": "https://<account-id>.r2.cloudflarestorage.com (Cloudflare R2) or https://s3.<region>.amazonaws.com (AWS S3) or https://s3.<region>.backblazeb2.com (Backblaze B2)",
-    "access_key_id": "YOUR_ACCESS_KEY_ID",
-    "secret_access_key": "YOUR_SECRET_ACCESS_KEY",
-    "bucket": "YOUR_BUCKET_NAME",
-    "public_url": "https://your-public-bucket-url"
-  },
-  "podcast": {
-    "title": "Morsel",
-    "description": "Daily article digest in summarized audio",
-    "author": "Morsel",
-    "image_url": ""
-  },
-  "tts": {
-    "voice": "en-US-AndrewMultilingualNeural"
-  }
-}
-```
-
 ### Running manually
 
 You can also run each step individually, instead of waiting for the cron job:
