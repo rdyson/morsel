@@ -3,7 +3,7 @@
 # Morsel installer — install from the latest GitHub release.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/rdyson/morsel/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/rdyson/morsel/master/install.sh | bash
 #
 # Environment variables:
 #   MORSEL_DIR  — install directory (default: ./morsel)

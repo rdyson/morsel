@@ -34,7 +34,7 @@ https://github.com/user-attachments/assets/4583c561-d233-4ca8-9296-f3a19e2217e7
 ## Quick start
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rdyson/morsel/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/rdyson/morsel/master/install.sh | bash
 ```
 
 The installer downloads the latest release, sets up a Python environment, and walks you through configuration. You'll need your [AgentMail](https://agentmail.to) API key, [Anthropic API key](https://console.anthropic.com), and S3-compatible storage credentials ready.
