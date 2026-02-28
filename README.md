@@ -17,7 +17,7 @@ Daily article digest in a podcast for a few cents an episode. Forward links thro
 - [AgentMail](https://agentmail.to) account (email ingestion; free up to 3,000 emails/month)
 - [Anthropic API key](https://console.anthropic.com) (summarization and podcast transcript, about $0.03 for 4 medium-length articles totaling around 3k words using Haiku 4.5; YMMV and you can try different [Anthropic models](https://platform.claude.com/docs/en/about-claude/models/overview))
 - S3-compatible storage with public access - [Cloudflare R2](https://developers.cloudflare.com/r2/) (10GB free), [AWS S3](https://aws.amazon.com/s3/), [Backblaze B2](https://www.backblaze.com/b2/), etc.
-- Edge TTS is free and requires no API key or setup
+- [Jina Reader](https://jina.ai/reader) (for grabbing article text) and [Edge TTS](https://pypi.org/project/edge-tts) (for generating audio) are free and requires no API key or setup
 
 ## Example
 
