@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 Poll AgentMail for new emails, extract URLs, scrape articles, and queue them.
 

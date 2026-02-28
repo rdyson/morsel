@@ -1,6 +1,7 @@
 """
 Upload files to S3-compatible storage and manage the podcast RSS feed.
 """
+from __future__ import annotations
 
 import hashlib
 import json

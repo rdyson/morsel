@@ -13,7 +13,7 @@ Daily article digest in a podcast for a few cents an episode. Forward links thro
 ## Requirements
 
 - A machine that stays on for daily automation (VM, VPS, Raspberry Pi, other always-on machine, etc.) — or run manually on any machine including macOS
-- Python 3.10+
+- Python 3.8+
 - [AgentMail](https://agentmail.to) account (email ingestion; free up to 3,000 emails/month)
 - [Anthropic API key](https://console.anthropic.com) (summarization and podcast transcript, about $0.03 for 4 medium-length articles totaling around 3k words using Haiku 4.5; YMMV and you can try different [Anthropic models](https://platform.claude.com/docs/en/about-claude/models/overview))
 - S3-compatible storage with public access - [Cloudflare R2](https://developers.cloudflare.com/r2/) (10GB free), [AWS S3](https://aws.amazon.com/s3/), [Backblaze B2](https://www.backblaze.com/b2/), etc.
@@ -23,15 +23,25 @@ Daily article digest in a podcast for a few cents an episode. Forward links thro
 
 Generated from 3 articles:
 
-* [Do you have to be polite to AI?](https://www.bbc.com/future/article/20260224-the-best-way-to-talk-to-a-chatbot)
-* [How to make your AI agents remember and forget?](https://patrickdesjardins.com/blog/how-to-make-agent-ai-remember-and-forget)
-* [Minions: Stripe’s one-shot, end-to-end coding agents](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents)
+- [Do you have to be polite to AI?](https://www.bbc.com/future/article/20260224-the-best-way-to-talk-to-a-chatbot)
+- [How to make your AI agents remember and forget?](https://patrickdesjardins.com/blog/how-to-make-agent-ai-remember-and-forget)
+- [Minions: Stripe’s one-shot, end-to-end coding agents](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents)
 
 <br />
 
 https://github.com/user-attachments/assets/4583c561-d233-4ca8-9296-f3a19e2217e7
 
-## Setup
+## Quick start
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/rdyson/morsel/main/install.sh | bash
+```
+
+The installer downloads the latest release, sets up a Python environment, and walks you through configuration. You'll need your [AgentMail](https://agentmail.to) API key, [Anthropic API key](https://console.anthropic.com), and S3-compatible storage credentials ready.
+
+Subscribe to `<your storage public URL>/feed.xml` in any podcast app, and forward article URLs to your AgentMail inbox.
+
+## Manual setup
 
 1. Run the following commands
 
@@ -48,10 +58,10 @@ cp config.example.json config.json
 3. Create an inbox at [AgentMail](https://agentmail.to) and put your API key and inbox email address in `config.json`. You can use an obscure email address to reduce the chances of getting spam.
 4. Add your email address(es) to `allowed_senders` to restrict who can submit links. If the list is empty, all senders are accepted.
 5. Add any S3-compatible provider. Example with Cloudflare R2:
-    1. Create a bucket in the [Cloudflare dashboard](https://dash.cloudflare.com) → R2
-    2. Enable public access on the bucket (gives you a `pub-xxx.r2.dev` URL)
-    3. Create an API token with read/write access
-    4. Fill in the `storage` fields in `config.json`. For AWS S3, set `endpoint_url` to `https://s3.<region>.amazonaws.com`. For Backblaze B2, use their S3-compatible endpoint.
+   1. Create a bucket in the [Cloudflare dashboard](https://dash.cloudflare.com) → R2
+   2. Enable public access on the bucket (gives you a `pub-xxx.r2.dev` URL)
+   3. Create an API token with read/write access
+   4. Fill in the `storage` fields in `config.json`. For AWS S3, set `endpoint_url` to `https://s3.<region>.amazonaws.com`. For Backblaze B2, use their S3-compatible endpoint.
 6. Set up the daily cron job. Customize your cron job with help from [Crontab Guru](https://crontab.guru). It polls for new emails, generates a digest from queued articles, uploads to storage, and cleans up episodes older than 30 days.
 
 ```bash
