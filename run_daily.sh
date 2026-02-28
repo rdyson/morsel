@@ -2,7 +2,7 @@
 #
 # Daily podcast digest generation.
 #
-# 1. Polls AgentMail for any remaining unprocessed emails
+# 1. Polls AgentMail for any unprocessed emails
 # 2. Generates the digest from the queue
 # 3. Uploads audio + feed to storage
 # 4. Cleans up old episodes from storage
@@ -21,7 +21,7 @@ echo "========================================"
 echo "  Morsel — $(date -u '+%Y-%m-%d %H:%M UTC')"
 echo "========================================"
 
-# 1. Poll for any last-minute emails
+# 1. Poll for emails
 echo ""
 echo "[1/3] Polling inbox..."
 python poll_inbox.py
